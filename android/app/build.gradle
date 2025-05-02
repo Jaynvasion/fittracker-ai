@@ -78,6 +78,9 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.fitnessapp"
+    flavorDimensions "react-native-camera"
+
+
     defaultConfig {
         applicationId "com.fitnessapp"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -93,6 +96,8 @@ android {
             keyPassword 'android'
         }
     }
+    
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -117,3 +122,4 @@ dependencies {
         implementation jscFlavor
     }
 }
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
