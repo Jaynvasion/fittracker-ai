@@ -10,12 +10,15 @@ import { BackScreen } from './src/screeens/BackScreen';
 import { TricepScreen } from './src/screeens/TricepScreen';
 import { ShoulderScreen } from './src/screeens/ShoulderScreen';
 import { LegsScreen } from './src/screeens/LegsScreen';
-import { cloriecaculator } from './src/screeens/cloriecaculator';
+import  Cloriecaculator  from './src/screeens/Cloriecaculator';
 import SplashScreen from './src/screeens/getstarted';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
 import LoginScreen from './src/screeens/LoginScreen';
 import SignupScreen from './src/screeens/SignupScreen';
+import SettingsScreen from './src/screeens/SettingsScreen';
+import CalorieDiaryScreen from './src/screeens/CalorieDiaryScreen';
+import WorkoutsScreen from './src/screeens/WorkoutsScreen';
 
 import { useDispatch, useSelector } from 'react-redux';
 const Stack = createNativeStackNavigator();
@@ -40,7 +43,11 @@ function RootStack() {
       <Stack.Screen name="TricepScreen" component={TricepScreen} />
       <Stack.Screen name="ShoulderScreen" component={ShoulderScreen} />
       <Stack.Screen name="LegsScreen" component={LegsScreen} />
-      <Stack.Screen name="calories" component={cloriecaculator} />
+      <Stack.Screen name="calories" component={Cloriecaculator} />
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <Stack.Screen name="CalorieDiary" component={CalorieDiaryScreen} />
+      <Stack.Screen name="WorkoutsScreen" component={WorkoutsScreen} />
+
     </Stack.Navigator>
   );
 }

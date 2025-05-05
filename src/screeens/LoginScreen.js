@@ -1,41 +1,60 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, Alert } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { v4 as uuidv4 } from 'uuid';
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = ({ navigation }) => {
+export default function LoginScreen() {
+  const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     const storedUser = await AsyncStorage.getItem('user');
-    if (!storedUser) {
-      return Alert.alert('No user found');
-    }
+    const user = storedUser ? JSON.parse(storedUser) : null;
 
-    const parsedUser = JSON.parse(storedUser);
-
-    if (parsedUser.email === email && parsedUser.password === password) {
-      const token = uuidv4();
-      await AsyncStorage.setItem('token', token);
-      dispatch({ type: 'SET_USER', payload: parsedUser });
-      dispatch({ type: 'SET_TOKEN', payload: token });
+    if (user && user.email === email && user.password === password) {
       navigation.navigate('Home');
     } else {
-      Alert.alert('Invalid credentials');
+      Alert.alert('Invalid Credentials', 'Email or password is incorrect.');
     }
   };
 
   return (
-    <View>
-      <TextInput placeholder="Email" onChangeText={setEmail} />
-      <TextInput placeholder="Password" secureTextEntry onChangeText={setPassword} />
-      <Button title="Login" onPress={handleLogin} />
-      <Text onPress={() => navigation.navigate('Signup')}>Don't have an account? Sign up</Text>
-    </View>
-  );
-};
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.container}>
+      <Text style={styles.title}>Login</Text>
 
-export default LoginScreen;
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        onChangeText={setEmail}
+        value={email}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+        onChangeText={setPassword}
+        value={password}
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+        <Text style={styles.link}>Don't have an account? Sign Up</Text>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
+  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 24, alignSelf: 'center' },
+  input: { borderWidth: 1, borderColor: '#ccc', padding: 12, marginBottom: 16, borderRadius: 8 },
+  button: { backgroundColor: '#000', padding: 14, borderRadius: 8, alignItems: 'center' },
+  buttonText: { color: '#fff', fontWeight: '600' },
+  link: { marginTop: 16, color: '#444', textAlign: 'center' },
+});

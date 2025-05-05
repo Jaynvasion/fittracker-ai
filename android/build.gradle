@@ -5,17 +5,30 @@ buildscript {
         compileSdkVersion = 35
         targetSdkVersion = 35
         ndkVersion = "27.1.12297006"
-        kotlinVersion = "2.0.21"
+        kotlinVersion = "1.8.0" // stick to 1.8.0 to avoid plugin issues
     }
+
     repositories {
         google()
         mavenCentral()
-         maven { url 'https://www.jitpack.io' } 
+        jcenter()
+        maven { url 'https://www.jitpack.io' } // fixed jitpack url
     }
+
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        classpath("com.android.tools.build:gradle:7.3.1") // 👈 add gradle version here
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0") // 👈 use valid version
+        classpath("com.google.gms:google-services:4.3.15")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://www.jitpack.io' } // needed for fingerprintidentify
     }
 }
 

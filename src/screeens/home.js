@@ -1,8 +1,16 @@
+// home.js — RECLAWIBRATE LUX EDITION UPGRADED
+
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import {
+  View, Text, StyleSheet, Image, ScrollView, Alert, TouchableOpacity
+} from 'react-native';
 import { accelerometer, setUpdateIntervalForType, SensorTypes } from 'react-native-sensors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/native';
+import ReactNativeBiometrics from 'react-native-biometrics';
+
 import e1 from "../utils/assets/e1.jpg";
 import e2 from "../utils/assets/e2.jpg";
 import e3 from "../utils/assets/e3.jpg";
@@ -13,20 +21,21 @@ import legs from "../utils/assets/legs.jpg";
 import shoulder from "../utils/assets/shoulder.jpg";
 import chest from "../utils/assets/chest.jpg";
 import tricept from "../utils/assets/tricept.jpg";
-import ReactNativeBiometrics from 'react-native-biometrics';
-import { useNavigation } from '@react-navigation/native';
-function HomeScreen() {
+
+const HomeScreen = () => {
+  const navigation = useNavigation();
+  const lastMagnitude = useRef(0);
+  const stepCooldown = useRef(false);
+  const timerRef = useRef(null);
+
   const [steps, setSteps] = useState(0);
   const [heartRate, setHeartRate] = useState(null);
   const [scanning, setScanning] = useState(false);
-  const lastMagnitude = useRef(0);
-  const stepCooldown = useRef(false);
-  const navigation = useNavigation();
+  const [isRunning, setIsRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [hours, setHours] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const timerRef = useRef(null);
+
   const data = [
     { img: chest, title: 'Chest', screen: 'chest' },
     { img: back, title: 'Back', screen: 'BackScreen' },
@@ -35,254 +44,199 @@ function HomeScreen() {
     { img: tricept, title: 'Tricep', screen: 'TricepScreen' },
     { img: legs, title: 'Legs', screen: 'LegsScreen' },
   ];
+
   useEffect(() => {
     if (isRunning) {
       timerRef.current = setInterval(() => {
-        setSeconds(prevSeconds => {
-          if (prevSeconds + 1 === 60) {
-            setMinutes(prevMinutes => {
-              if (prevMinutes + 1 === 60) {
-                setHours(prevHours => prevHours + 1);
+        setSeconds(prev => {
+          if (prev + 1 === 60) {
+            setMinutes(min => {
+              if (min + 1 === 60) {
+                setHours(hour => hour + 1);
                 return 0;
               }
-              return prevMinutes + 1;
+              return min + 1;
             });
             return 0;
           }
-          return prevSeconds + 1;
+          return prev + 1;
         });
       }, 1000);
     } else {
       clearInterval(timerRef.current);
     }
-
     return () => clearInterval(timerRef.current);
   }, [isRunning]);
 
-  const handleStartStop = () => {
-    setIsRunning(prev => !prev); // Toggle start/stop
-  };
-
-  const handleReset = () => {
-    setIsRunning(false);
-    setSeconds(0);
-    setMinutes(0);
-    setHours(0);
-  };
-
   useEffect(() => {
-    setUpdateIntervalForType(SensorTypes.accelerometer, 1000); // 1 second
-
+    setUpdateIntervalForType(SensorTypes.accelerometer, 1000);
     const subscription = accelerometer.subscribe(({ x, y, z }) => {
       const magnitude = Math.sqrt(x * x + y * y + z * z);
       const diff = Math.abs(magnitude - lastMagnitude.current);
-
       if (!stepCooldown.current && diff > 1.0) {
         setSteps(prev => prev + 1);
         stepCooldown.current = true;
-
-        setTimeout(() => {
-          stepCooldown.current = false;
-        }, 800);
+        setTimeout(() => { stepCooldown.current = false }, 800);
       }
-
       lastMagnitude.current = magnitude;
     });
-
     return () => subscription.unsubscribe();
   }, []);
 
   const scanFingerprint = () => {
     const rnBiometrics = new ReactNativeBiometrics();
-
-    setScanning(true); // Start scanning
-
+    setScanning(true);
     rnBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' })
-      .then((resultObject) => {
-        const { success } = resultObject;
-
+      .then(({ success }) => {
         if (success) {
-          // Generate fake random heart rate between 60 and 120
-          const randomHeartRate = Math.floor(Math.random() * (120 - 60 + 1)) + 60;
-          setHeartRate(randomHeartRate);
-          Alert.alert('Fingerprint matched!', `Heart Rate: ${randomHeartRate} BPM ❤️`);
+          const bpm = Math.floor(Math.random() * (120 - 60 + 1)) + 60;
+          setHeartRate(bpm);
+          Alert.alert('Fingerprint matched!', `❤️ Heart Rate: ${bpm} BPM`);
         } else {
           Alert.alert('Fingerprint not matched');
           setHeartRate(null);
         }
       })
-      .catch(() => {
-        Alert.alert('Fingerprint scan failed');
-        setHeartRate(null);
-      })
-      .finally(() => {
-        setScanning(false); // End scanning
-      });
+      .catch(() => Alert.alert('Scan failed'))
+      .finally(() => setScanning(false));
   };
-  const handleResetstep = () => {
-    // setIsRunning(false);
-    // setSeconds(0);
-    // setMinutes(0);
-    // setHours(0);
-    setSteps(0); // Add this line to reset steps too
-  };
+
   return (
     <View style={styles.container}>
-      {/* Top Bar */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <View style={styles.circle}></View>
-
-        <Text onPress={()=>navigation.navigate("calories")} style={{ fontSize: 18, fontWeight: "bold" ,color:"#000"}}>Home
-        </Text>
-
-        <TouchableOpacity style={{borderRadius:15, backgroundColor: "red", width: 100,height:40, justifyContent: "center", alignItems: "center" }} onPress={handleResetstep}>
-        <Text style={{fontSize: 18, fontWeight: "bold" ,color:"#000"}}>
-        Step Reset
-        </Text>
+      {/* Header */}
+      <View style={styles.topBar}>
+        <TouchableOpacity onPress={() => navigation.navigate("SettingsScreen")}>
+          <Ionicons name="settings-sharp" size={30} color="#000" />
         </TouchableOpacity>
-      
-
-
+        <Text style={styles.titleText}>FitTracker AI</Text>
+        <TouchableOpacity onPress={() => setSteps(0)}>
+          <MaterialCommunityIcons name="restart" size={28} color="#f55" />
+        </TouchableOpacity>
       </View>
 
-      {/* Images ScrollView */}
-      <View style={{ height: 220 }}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {[e1, e2, e3, e4].map((img, index) => (
-            <View key={index} style={styles.imageContainer}>
-              <Image style={[styles.image, { width: 310 }]} resizeMode="cover" source={img} />
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-      <Text style={styles.heading}>Health</Text>
-      {/* Steps & Heart Rate */}
-      <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 10 }}>
-        {/* Steps Counter */}
-        <View style={styles.box}>
-          <Text style={styles.counter}>
-            <Ionicons name="footsteps-outline" size={54} color="black" /> : {steps}
-          </Text>
+      {/* Banner */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.bannerScroll}>
+        {[e1, e2, e3, e4].map((img, i) => (
+          <Image key={i} source={img} style={styles.bannerImage} />
+        ))}
+      </ScrollView>
+
+      <Text style={styles.sectionTitle}>Health</Text>
+
+      <View style={styles.healthBoxRow}>
+        <View style={styles.healthBox}>
+          <Ionicons name="footsteps-outline" size={45} />
+          <Text style={styles.infoText}>{steps} Steps</Text>
         </View>
-
-        {/* Heart Rate Scanner */}
-        <TouchableOpacity style={styles.box} onPress={scanFingerprint}>
-          {scanning ? (
-            <Text style={styles.scanningText}>Scanning...</Text>
-          ) : (
+        <TouchableOpacity style={styles.healthBox} onPress={scanFingerprint}>
+          {scanning ? <Text style={styles.infoText}>Scanning...</Text> : (
             <>
-              <FontAwesome name="heartbeat" size={54} color="red" />
-              {heartRate !== null && <Text style={styles.heartRateText}>{heartRate} BPM</Text>}
-              {heartRate === null && <Text style={styles.counter}>Tap to Scan</Text>}
+              <FontAwesome name="heartbeat" size={45} color="red" />
+              <Text style={styles.infoText}>{heartRate ? `${heartRate} BPM` : 'Tap to Scan'}</Text>
             </>
           )}
         </TouchableOpacity>
       </View>
-      <Text style={styles.heading}>Excersises  </Text>
-      <View style={{ height: 250 }}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {data.map((item, index) => (
-            <TouchableOpacity onPress={() => navigation.navigate(item.screen)} key={index} style={styles.imageContainerex}>
-              <Image style={styles.image} resizeMode="cover" source={item.img} />
-              <View>
 
-                <Text style={styles.title}>{item.title}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-      <View style={{flexDirection:"row",justifyContent:"space-between",borderWidth:1,height:70,alignItems:"center",paddingHorizontal:10,backgroundColor:"#fff",borderRadius:15}}>
-        <TouchableOpacity style={{borderRadius:15, backgroundColor: "red", width: 100,height:50, justifyContent: "center", alignItems: "center" }} onPress={handleStartStop}>
-          <Text style={{fontSize: 18, fontWeight: "bold" ,color:"#000"}}>{isRunning ? "Stop" : "Start"}</Text>
-        </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>{hours} : {minutes} : {seconds}
-        </Text>
-        <TouchableOpacity style={{borderRadius:15, backgroundColor: "red", width: 100,height:50, justifyContent: "center", alignItems: "center" }} onPress={handleReset}>
-        <Text style={{fontSize: 18, fontWeight: "bold" ,color:"#000"}}>
-        Reset
-        </Text>
-          
+      <TouchableOpacity
+        style={styles.caloriesBox}
+        onPress={() => navigation.navigate("calories")}
+      >
+        <MaterialCommunityIcons name="fire" size={28} color="#fff" />
+        <Text style={styles.btnText}>Track Calories</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.sectionTitle}>Workouts</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.workoutScroll}>
+        {data.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.workoutTile}
+            onPress={() => navigation.navigate(item.screen)}
+          >
+            <Image source={item.img} style={styles.workoutImage} />
+            <Text style={styles.workoutText}>{item.title}</Text>
           </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      {/* Timer */}
+      <View style={styles.timerBar}>
+        <TouchableOpacity onPress={() => setIsRunning(!isRunning)} style={styles.redButton}>
+          <Text style={styles.btnText}>{isRunning ? "Stop" : "Start"}</Text>
+        </TouchableOpacity>
+        <Text style={styles.timerText}>{hours} : {minutes} : {seconds}</Text>
+        <TouchableOpacity onPress={() => {
+          setIsRunning(false);
+          setSeconds(0);
+          setMinutes(0);
+          setHours(0);
+        }} style={styles.redButton}>
+          <Text style={styles.btnText}>Reset</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
-}
+};
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5', padding: 10 },
-  counter: { fontSize: 20, fontWeight: 'bold', color: '#333', textAlign: 'center' },
-  circle: {
-    width: 50,
-    height: 50,
-    backgroundColor: "red",
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 25,
+  container: { flex: 1, backgroundColor: '#fff', padding: 15 },
+  topBar: {
+    flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 15
   },
-  box: {
-    width: 150,
-    height: 150,
-    borderWidth: 1,
-    borderColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 25,
-    backgroundColor: "white"
+  titleText: {
+    fontSize: 24, fontWeight: "bold", color: "#111"
   },
-  imageContainer: {
-    width: 320,
-    height: 210,
-    borderWidth: 1,
-    borderColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-    marginHorizontal: 10
+  redButton: {
+    backgroundColor: "#f55", borderRadius: 15, paddingVertical: 10, paddingHorizontal: 20
   },
-  imageContainerex: {
-    width: 210,
-    height: 230,
-    borderWidth: 1,
-    borderColor: "black",
-    justifyContent: "center",
-    // alignItems: "center",
-    backgroundColor: "white",
-    // marginRight: 10
-
+  redButtonSmall: {
+    backgroundColor: "#f55", borderRadius: 10, paddingVertical: 6, paddingHorizontal: 12
   },
-  image: {
-    width: 200,
-    height: 200
+  btnText: {
+    color: "#fff", fontWeight: "bold", fontSize: 16
   },
-  heartRateText: {
-    fontSize: 24,
-    color: 'red',
-    fontWeight: 'bold',
-    marginTop: 10,
-    textAlign: 'center'
+  bannerScroll: {
+    height: 200, marginBottom: 15
   },
-  scanningText: {
-    fontSize: 18,
-    color: 'gray',
-    fontWeight: 'bold',
-    textAlign: 'center'
+  bannerImage: {
+    width: 300, height: 190, borderRadius: 15, marginRight: 15
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    // marginRight:70
-    left: 10
-
-
+  sectionTitle: {
+    fontSize: 22, fontWeight: "bold", color: "#111", marginVertical: 10
   },
-  heading: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginVertical: 9,
-
-
-  }, timerText: { fontSize: 48, fontWeight: 'bold', marginBottom: 30 },
+  healthBoxRow: {
+    flexDirection: "row", justifyContent: "space-between", marginBottom: 15
+  },
+  healthBox: {
+    backgroundColor: "#eee", borderRadius: 15, width: "48%", height: 120,
+    justifyContent: "center", alignItems: "center"
+  },
+  infoText: {
+    fontSize: 16, fontWeight: "600", marginTop: 8
+  },
+  caloriesBox: {
+    backgroundColor: "#111", padding: 15, borderRadius: 15, flexDirection: "row",
+    alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 15
+  },
+  workoutScroll: {
+    height: 250, marginBottom: 20
+  },
+  workoutTile: {
+    marginRight: 15, width: 160
+  },
+  workoutImage: {
+    width: 160, height: 160, borderRadius: 15
+  },
+  workoutText: {
+    textAlign: "center", marginTop: 8, fontWeight: "bold"
+  },
+  timerBar: {
+    flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 10
+  },
+  timerText: {
+    fontSize: 22, fontWeight: "bold"
+  }
 });

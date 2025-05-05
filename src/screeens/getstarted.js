@@ -11,7 +11,7 @@ const SplashScreen = () => {
       <Image source={logo} style={styles.logo} />
 
       <Text style={styles.quote}>
-        “Your body can stand almost anything. It’s your mind that you have to convince.”
+        “Discipline turns dreams into results.                             Welcome to the grind.”
       </Text>
 
       <TouchableOpacity
@@ -62,4 +62,3 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
   });
-  
