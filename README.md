@@ -1,97 +1,103 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# FitTracker AI 🧠💪
 
-# Getting Started
+> **By Jehad AlAzzeh**  
+> End-of-year university project • Built during the darkest timeline 💀
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 📱 About the App
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+**FitTracker AI** is a personal fitness companion that combines essential workout tracking with basic AI assistant features. Users can:
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- Track daily steps and heart rate (via fingerprint scan)
+- Log meals with calorie & macro breakdowns
+- Navigate a customized workout interface by muscle group
+- 🧠 **(Coming Soon)**: Chat with an AI Coach for fitness tips & motivation
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
-```
+## 🛠 Tech Stack
 
-## Step 2: Build and run your app
+- React Native (JavaScript)
+- Firebase (auth + potential backend)
+- AsyncStorage (local diary persistence)
+- Native sensors (Accelerometer + Biometric prompt)
+- Free AI API Integration (in progress – DeepSeek/OpenAI)
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+---
 
-### Android
+## 📖 Story Behind the Code *(The Morocco Arc)*
 
-```sh
-# Using npm
-npm run android
+This app was built during my stay in Morocco after I **broke my main laptop** mid-way through development 😭. With barely any time left, I switched to a backup PC and literally started over.
 
-# OR using Yarn
-yarn android
-```
+Due to my limited environment and stress, I had to use **some paid libraries** (like fingerprint scanner) just to keep moving. Each part of this app was built through sleepless nights, deep frustration, and mental fatigue — but I finished it.
 
-### iOS
+This is my real code, from scratch, under fire. 💯
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+---
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## 👨‍💻 Built With Grit
 
-```sh
-bundle install
-```
+Everything you see in this repo — UI, sensors, calorie diary, navigation, timer, fingerprint BPM, and FitBot’s foundation — was **written, fixed, and polished** by me:  
+**Jehad AlAzzeh**
 
-Then, and every time you update your native dependencies, run:
+---
 
-```sh
-bundle exec pod install
-```
+## 🧠 FitBot – AI Coach *(in progress)*
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+The groundwork for a virtual AI fitness coach has been added. Once hooked into a free LLM API, users will be able to:
 
-```sh
-# Using npm
-npm run ios
+- Ask questions like:  
+  “How can I grow my chest faster?”  
+  “What’s a good leg-day plan?”  
+  “What protein foods are low-calorie?”
 
-# OR using Yarn
-yarn ios
-```
+- And receive motivational or educational replies from **FitBot**.
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+---
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## ⚙️ How to Run the App
 
-## Step 3: Modify your app
+> Make sure your Android emulator is open or your Android device is plugged in (with USB debugging enabled).
 
-Now that you have successfully run the app, let's make changes!
+### 1. Clone the Repo
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+    git clone https://github.com/Jaynvasion/fittracker-ai.git
+    cd fittracker-ai
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+### 2. Install Dependencies
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+    npm install
 
-## Congratulations! :tada:
+### 3. Start Metro Bundler
 
-You've successfully run and modified your React Native App. :partying_face:
+    npx react-native start
 
-### Now what?
+### 4. Run on Android
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+Open another terminal and run:
 
-# Troubleshooting
+    npx react-native run-android
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+---
 
-# Learn More
+## 🚀 Status
 
-To learn more about React Native, take a look at the following resources:
+✅ Core Features Complete  
+🧠 FitBot AI Integration – Pending  
+🔥 Mental Breakdown – Survived  
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+---
+
+## 🔥 Personal Note
+
+This app was built through pure willpower, pressure, and a deep need to **not fail**. The journey was brutal — a broken laptop, tight deadlines, limited tools, and overwhelming stress — but I made it.
+
+This is my real project. Let this README be a reminder.
+
+---
+
+## 👋 Contact
+
+- Email: jehadala33eh@icloud.com
+- GitHub: https://github.com/Jaynvasion
