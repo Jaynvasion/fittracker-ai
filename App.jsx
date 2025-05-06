@@ -19,6 +19,7 @@ import SignupScreen from './src/screeens/SignupScreen';
 import SettingsScreen from './src/screeens/SettingsScreen';
 import CalorieDiaryScreen from './src/screeens/CalorieDiaryScreen';
 import WorkoutsScreen from './src/screeens/WorkoutsScreen';
+import AICoachScreen from './src/screeens/AICoachScreen';
 
 import { useDispatch, useSelector } from 'react-redux';
 const Stack = createNativeStackNavigator();
@@ -47,6 +48,8 @@ function RootStack() {
       <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       <Stack.Screen name="CalorieDiary" component={CalorieDiaryScreen} />
       <Stack.Screen name="WorkoutsScreen" component={WorkoutsScreen} />
+      <Stack.Screen name="AICoach" component={AICoachScreen} options={{ title: 'FitBot - AI Coach' }} />
+
 
     </Stack.Navigator>
   );

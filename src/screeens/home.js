@@ -146,6 +146,15 @@ const HomeScreen = () => {
         <Text style={styles.btnText}>Track Calories</Text>
       </TouchableOpacity>
 
+      {/* FitBot AI Coach */}
+      <TouchableOpacity
+        style={styles.fitbotButton}
+        onPress={() => navigation.navigate('AICoach')}
+      >
+        <MaterialCommunityIcons name="robot" size={24} color="#fff" />
+        <Text style={styles.btnText}>Talk to FitBot</Text>
+      </TouchableOpacity>
+
       <Text style={styles.sectionTitle}>Workouts</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.workoutScroll}>
         {data.map((item, index) => (
@@ -220,6 +229,10 @@ const styles = StyleSheet.create({
   caloriesBox: {
     backgroundColor: "#111", padding: 15, borderRadius: 15, flexDirection: "row",
     alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 15
+  },
+  fitbotButton: {
+    backgroundColor: "#333", padding: 15, borderRadius: 15, flexDirection: "row",
+    alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 20
   },
   workoutScroll: {
     height: 250, marginBottom: 20
