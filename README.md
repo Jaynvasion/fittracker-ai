@@ -19,7 +19,7 @@
 ## 🛠 Tech Stack
 
 - React Native (JavaScript)
-- Firebase (auth + potential backend)
+- Firebase (in progress - auth + potential backend)
 - AsyncStorage (local diary persistence)
 - Native sensors (Accelerometer + Biometric prompt)
 - Free AI API Integration (in progress – DeepSeek/OpenAI)
@@ -30,7 +30,7 @@
 
 This app was built during my stay in Morocco after I **broke my main laptop** mid-way through development 😭. With barely any time left, I switched to a backup PC and literally started over.
 
-Due to my limited environment and stress, I had to use **some paid libraries** (like fingerprint scanner) just to keep moving. Each part of this app was built through sleepless nights, deep frustration, and mental fatigue — but I finished it.
+Due to my limited environment and stress, I had to use **paid libraries computers**  just to keep moving. Each part of this app was built through sleepless nights, deep frustration, and mental fatigue — but I finished it.
 
 This is my real code, from scratch, under fire. 💯
 
