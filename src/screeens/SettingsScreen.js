@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Switch,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
@@ -13,7 +14,7 @@ const SettingsScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <Text style={styles.title}>⚙️ Settings</Text>
 
       <View style={styles.settingCard}>
@@ -37,7 +38,14 @@ const SettingsScreen = () => {
       </View>
 
       <TouchableOpacity
-        style={styles.button}
+        style={styles.optionBox}
+        onPress={() => navigation.navigate("VO2Dataset")}
+      >
+        <Text style={styles.optionText}>📊 VO2 Max Dataset</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.logoutButton}
         onPress={() => {
           navigation.dispatch(
             CommonActions.reset({
@@ -50,7 +58,7 @@ const SettingsScreen = () => {
         <Icon name="log-out-outline" size={20} color="#fff" />
         <Text style={styles.buttonText}>Log Out</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -82,8 +90,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#eee',
   },
-  button: {
-    marginTop: 40,
+  optionBox: {
+    backgroundColor: '#1c1c1e',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginTop: 10,
+    marginBottom: 30,
+  },
+  optionText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  logoutButton: {
     backgroundColor: '#e50914',
     paddingVertical: 12,
     borderRadius: 12,
